@@ -3,6 +3,8 @@
 
 #include <cstdint>
 
+// #define DPRINT 1
+
 #define GSV_TPI 4
 
 // #define GSV_256BIT

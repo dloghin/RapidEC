@@ -764,8 +764,10 @@ void GSV_sign_exec(int num_gpus, int count, gsv_sign_t *sig) {
     std::chrono::duration<double> t_diff = t_end - t_start;
     std::chrono::duration<double> k_diff = k_end - k_start;
 
+#ifdef DPRINT
     printf("Wall time: %lfs (Mem transfer %lfs), Speed: %lf sign/s (w/o mem transfer: %lfV/s)\n", t_diff.count(),
            t_diff.count() - k_diff.count(), (double)count * num_gpus / t_diff.count(), (double)count * num_gpus / k_diff.count());
+#endif
 }
 
 void GSV_sign_close(int num_gpus) {
@@ -786,6 +788,10 @@ void GSV_verify_init(int num_gpus) {
     TPB = (params::TPB == 0) ? 128 : params::TPB;  // default threads per block is 128
     TPI = params::TPI;
     IPB = TPB / TPI;  // IPB: instances per block
+
+    printf("TPB %d\n", TPB);
+    printf("TPI %d\n", TPI);
+    printf("IPB %d\n", IPB);
 
     set_words(sm2.order._limbs, "FFFFFFFEFFFFFFFFFFFFFFFFFFFFFFFF7203DF6B21C6052B53BBF40939D54123", GSV_BITS / 32);
     set_words(sm2.field._limbs, "FFFFFFFEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000FFFFFFFFFFFFFFFF", GSV_BITS / 32);
@@ -868,8 +874,10 @@ void GSV_verify_exec(int num_gpus, int count, gsv_verify_t *sig, int *results) {
     std::chrono::duration<double> t_diff = t_end - t_start;
     std::chrono::duration<double> k_diff = k_end - k_start;
 
+#ifdef DPRINT
     printf("Wall time: %lfs (Mem transfer %lfs), Speed: %lf verify/s (w/o mem transfer: %lfV/s)\n", t_diff.count(),
            t_diff.count() - k_diff.count(), (double)count * num_gpus / t_diff.count(), (double)count * num_gpus / k_diff.count());
+#endif
 }
 
 void GSV_verify_close(int num_gpus) {
